@@ -128,8 +128,8 @@ export function initGsapWithScrollTrigger(lenis?: { scroll: number; onScroll: (c
   // Synchronize ScrollTrigger with Lenis if provided
   if (lenis) {
     ScrollTrigger.scrollerProxy(window, {
-      scrollTop(value: number) {
-        if (arguments.length) {
+      scrollTop(value?: number) {
+        if (typeof value === 'number') {
           lenis.scroll = value
         }
         return lenis.scroll

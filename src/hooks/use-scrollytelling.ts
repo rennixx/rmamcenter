@@ -62,7 +62,7 @@ export type TimelineBuilder = (timeline: any) => void
 export function useScrollytelling(
   builder: TimelineBuilder,
   options: ScrollytellingOptions = {}
-): RefObject<HTMLDivElement> {
+): RefObject<HTMLDivElement | null> {
   const { shouldReduceMotion } = useMotion()
   const containerRef = useRef<HTMLDivElement>(null)
   const timelineRef = useRef<any>(null)
@@ -154,8 +154,8 @@ export function useScrollytelling(
  */
 export function useScrollytellingGroup(
   builders: TimelineBuilder[],
-  options: ScrollytellingOptions = []
-): RefObject<HTMLDivElement>[] {
+  options: ScrollytellingOptions = {}
+): RefObject<HTMLDivElement | null>[] {
   const hooks = builders.map((builder) => useScrollytelling(builder, options))
   return hooks
 }

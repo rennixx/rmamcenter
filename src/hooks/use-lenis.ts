@@ -3,7 +3,7 @@
 import { useRef, useEffect, useCallback } from 'react'
 import Lenis from 'lenis'
 import { useMotion } from '@/components/providers/MotionProvider'
-import { defaultLenisOptions } from '@/lib/lenis'
+import { SCROLL } from '@/lib/constants'
 
 /**
  * Custom React hook that initializes and manages Lenis smooth scrolling.
@@ -37,13 +37,12 @@ export function useLenis() {
 
     // Initialize Lenis with luxury configuration
     const lenis = new Lenis({
-      duration: defaultLenisOptions.duration,
-      easing: defaultLenisOptions.easing,
-      orientation: defaultLenisOptions.orientation,
-      smoothWheel: defaultLenisOptions.smoothWheel,
-      smoothTouch: defaultLenisOptions.smoothTouch,
-      wheelMultiplier: defaultLenisOptions.wheelMultiplier,
-      touchMultiplier: defaultLenisOptions.touchMultiplier,
+      duration: SCROLL.DURATION,
+      easing: SCROLL.EASING,
+      orientation: 'vertical' as const,
+      smoothWheel: true,
+      wheelMultiplier: SCROLL.SMOOTH_MULTIPLIER,
+      touchMultiplier: SCROLL.SMOOTH_TOUCH_MULTIPLIER,
       infinite: false,
     })
 

@@ -112,7 +112,7 @@ export function useScrollAnimation(
           ScrollTrigger,
           container: containerRef.current,
         })
-      }, containerRef.current)
+      }, containerRef.current ?? undefined)
 
       return () => {
         context.revert()
