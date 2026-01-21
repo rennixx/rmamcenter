@@ -1,0 +1,236 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+/* CSS Custom Properties for Glass Morphism */
+:root {
+  /* Glass background colors */
+  --glass-bg: rgba(26, 26, 31, 0.6);
+  --glass-bg-dark: rgba(10, 14, 39, 0.7);
+  --glass-bg-light: rgba(255, 255, 255, 0.05);
+
+  /* Glass border colors */
+  --glass-border: rgba(255, 255, 255, 0.1);
+  --glass-border-light: rgba(255, 255, 255, 0.15);
+
+  /* Glass shadow */
+  --glass-shadow: 0 8px 32px 0 rgba(0, 0, 0, 0.3);
+
+  /* Font families */
+  --font-serif: 'Playfair Display', Georgia, serif;
+  --font-sans: 'Inter', system-ui, -apple-system, sans-serif;
+}
+
+/* Base styles */
+@layer base {
+  body {
+    @apply bg-midnight text-white antialiased;
+    font-family: var(--font-sans);
+    font-feature-settings: 'rlig' 1, 'calt' 1;
+    -webkit-font-smoothing: antialiased;
+    -moz-osx-font-smoothing: grayscale;
+  }
+
+  /* Typography base styles */
+  h1, h2, h3, h4, h5, h6 {
+    @apply font-serif;
+    font-family: var(--font-serif);
+  }
+
+  /* Selection color */
+  ::selection {
+    @apply bg-gold/30 text-white;
+  }
+
+  /* Scrollbar styles */
+  ::-webkit-scrollbar {
+    width: 8px;
+    height: 8px;
+  }
+
+  ::-webkit-scrollbar-track {
+    @apply bg-charcoal;
+  }
+
+  ::-webkit-scrollbar-thumb {
+    @apply bg-gold/50 rounded-full hover:bg-gold/70;
+  }
+
+  /* Focus styles for accessibility */
+  :focus-visible {
+    @apply outline-2 outline-offset-2 outline-gold;
+  }
+}
+
+/* Glass Panel Component */
+@layer components {
+  /* Base glass panel */
+  .glass-panel {
+    background: var(--glass-bg);
+    backdrop-filter: blur(12px);
+    -webkit-backdrop-filter: blur(12px);
+    border: 1px solid var(--glass-border);
+    box-shadow: var(--glass-shadow);
+    border-radius: 0.75rem;
+  }
+
+  /* Glass panel with dark background */
+  .glass-panel-dark {
+    background: var(--glass-bg-dark);
+    backdrop-filter: blur(12px);
+    -webkit-backdrop-filter: blur(12px);
+    border: 1px solid var(--glass-border);
+    box-shadow: var(--glass-shadow);
+    border-radius: 0.75rem;
+  }
+
+  /* Glass panel with high blur */
+  .glass-panel-blur {
+    background: var(--glass-bg);
+    backdrop-filter: blur(24px);
+    -webkit-backdrop-filter: blur(24px);
+    border: 1px solid var(--glass-border-light);
+    box-shadow: var(--glass-shadow);
+    border-radius: 0.75rem;
+  }
+
+  /* Glass card for content sections */
+  .glass-card {
+    @apply glass-panel p-6 transition-all duration-500 ease-luxury;
+  }
+
+  .glass-card:hover {
+    border-color: var(--glass-border-light);
+    transform: translateY(-2px);
+    box-shadow: 0 12px 48px 0 rgba(0, 0, 0, 0.4);
+  }
+
+  /* Glass navigation bar */
+  .glass-nav {
+    background: var(--glass-bg-dark);
+    backdrop-filter: blur(80px);
+    -webkit-backdrop-filter: blur(80px);
+    border-bottom: 1px solid var(--glass-border);
+  }
+
+  /* Glass modal overlay */
+  .glass-overlay {
+    background: rgba(10, 14, 39, 0.8);
+    backdrop-filter: blur(12px);
+    -webkit-backdrop-filter: blur(12px);
+  }
+
+  /* Fallback for browsers without backdrop-filter support */
+  @supports not (backdrop-filter: blur(12px)) {
+    .glass-panel,
+    .glass-panel-dark,
+    .glass-panel-blur,
+    .glass-card,
+    .glass-nav,
+    .glass-overlay {
+      background: rgba(10, 14, 39, 0.95);
+    }
+  }
+}
+
+/* Reduced motion support */
+@media (prefers-reduced-motion: reduce) {
+  *,
+  *::before,
+  *::after {
+    animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.01ms !important;
+    scroll-behavior: auto !important;
+  }
+}
+
+/* Utility classes for animations */
+@layer utilities {
+  /* Fade in animation */
+  .animate-fade-in {
+    animation: fade-in 0.5s ease-luxury;
+  }
+
+  @keyframes fade-in {
+    from {
+      opacity: 0;
+    }
+    to {
+      opacity: 1;
+    }
+  }
+
+  /* Slide up animation */
+  .animate-slide-up {
+    animation: slide-up 0.6s ease-luxury;
+  }
+
+  @keyframes slide-up {
+    from {
+      opacity: 0;
+      transform: translateY(20px);
+    }
+    to {
+      opacity: 1;
+      transform: translateY(0);
+    }
+  }
+
+  /* Scale in animation */
+  .animate-scale-in {
+    animation: scale-in 0.4s ease-luxury-out;
+  }
+
+  @keyframes scale-in {
+    from {
+      opacity: 0;
+      transform: scale(0.95);
+    }
+    to {
+      opacity: 1;
+      transform: scale(1);
+    }
+  }
+
+  /* Shine effect on hover */
+  .glass-shine {
+    position: relative;
+    overflow: hidden;
+  }
+
+  .glass-shine::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: -100%;
+    width: 50%;
+    height: 100%;
+    background: linear-gradient(
+      90deg,
+      transparent,
+      rgba(255, 255, 255, 0.1),
+      transparent
+    );
+    transition: left 0.6s ease-luxury;
+  }
+
+  .glass-shine:hover::before {
+    left: 100%;
+  }
+
+  /* Gradient text */
+  .text-gradient-gold {
+    @apply text-transparent bg-clip-text;
+    background-image: linear-gradient(135deg, #d4af37, #f0e8c2, #d4af37);
+  }
+
+  /* Subtle glow effect */
+  .glow-subtle {
+    box-shadow: 0 0 20px rgba(212, 175, 55, 0.15);
+  }
+
+  .glow-subtle:hover {
+    box-shadow: 0 0 30px rgba(212, 175, 55, 0.25);
+  }
+}

@@ -1,0 +1,102 @@
+# OS
+.DS_Store
+Thumbs.db
+ehthumbs.db
+Icon?
+Desktop.ini
+
+# Logs
+logs/
+*.log
+npm-debug.log*
+yarn-debug.log*
+yarn-error.log*
+pnpm-debug.log*
+
+# Node
+node_modules/
+# Optional: uncomment if you build into these dirs
+dist/
+build/
+out/
+public/build/
+.cache/
+.tmp/
+
+# Next/Nuxt/Parcel/Vite
+/.next/
+.nuxt/
+.parcel-cache/
+.vite/
+
+# Coverage
+coverage/
+nyc_output/
+
+# Environment
+.env
+.env.*.local
+.env.local
+.env.development.local
+.env.test.local
+.env.production.local
+
+# Dependency directories (PHP)
+vendor/
+
+# Visual Studio / .NET
+.vs/
+*.user
+*.suo
+*.userosscache
+*.sln.docstates
+bin/
+obj/
+TestResults/
+publish/
+*.dbmdl
+*.pdb
+
+# Visual Studio Code
+.vscode/
+
+# IDEs & editors
+.idea/
+*.iml
+*.ipr
+*.iws
+
+# Python
+__pycache__/
+*.pyc
+*.pyo
+*.pyd
+env/
+venv/
+.venv/
+
+# JetBrains
+.idea/
+*.idea/
+
+# Ruby
+.bundle
+log/
+tmp/
+
+# Composer
+composer.phar
+
+# Static site generators / common
+.sass-cache/
+.cache-loader
+
+# Misc
+*.swp
+*~
+.project
+.settings/
+.recommenders/
+
+# claude
+/.claude/
