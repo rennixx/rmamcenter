@@ -94,22 +94,24 @@ export function Heading({
   children,
   ...props
 }: HeadingProps) {
-  // Use a type assertion that works with both React 18 and 19
-  const tagMap = {
-    1: 'h1',
-    2: 'h2',
-    3: 'h3',
-    4: 'h4',
-    5: 'h5',
-    6: 'h6',
-  } as const
-  const Tag = tagMap[level] as 'h1' | 'h2' | 'h3' | 'h4' | 'h5' | 'h6'
+  const levelValue = level ?? 2
 
-  return (
-    <Tag className={cn(headingVariants({ level, weight }), className)} {...props}>
-      {children}
-    </Tag>
-  )
+  if (levelValue === 1) {
+    return <h1 className={cn(headingVariants({ level, weight }), className)} {...props}>{children}</h1>
+  }
+  if (levelValue === 2) {
+    return <h2 className={cn(headingVariants({ level, weight }), className)} {...props}>{children}</h2>
+  }
+  if (levelValue === 3) {
+    return <h3 className={cn(headingVariants({ level, weight }), className)} {...props}>{children}</h3>
+  }
+  if (levelValue === 4) {
+    return <h4 className={cn(headingVariants({ level, weight }), className)} {...props}>{children}</h4>
+  }
+  if (levelValue === 5) {
+    return <h5 className={cn(headingVariants({ level, weight }), className)} {...props}>{children}</h5>
+  }
+  return <h6 className={cn(headingVariants({ level, weight }), className)} {...props}>{children}</h6>
 }
 
 // ============================================================================
