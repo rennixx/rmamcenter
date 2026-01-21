@@ -276,19 +276,19 @@ const captionVariants = cva(['text-xs text-gray-500'], {
 
 export function Caption({
   as = 'span',
-  align,
+  align = 'left',
   className,
   children,
   ...props
 }: CaptionProps) {
-  const Tag = as
-
-  return (
-    // @ts-expect-error - Tag is dynamically assigned
-    <Tag className={cn(captionVariants({ align }), className)} {...props}>
-      {children}
-    </Tag>
-  )
+  // Use explicit conditional rendering instead of dynamic tag
+  if (as === 'figcaption') {
+    return <figcaption className={cn(captionVariants({ align }), className)} {...props}>{children}</figcaption>
+  }
+  if (as === 'caption') {
+    return <caption className={cn(captionVariants({ align }), className)} {...props}>{children}</caption>
+  }
+  return <span className={cn(captionVariants({ align }), className)} {...props}>{children}</span>
 }
 
 // ============================================================================
