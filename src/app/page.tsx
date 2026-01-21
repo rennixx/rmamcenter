@@ -1,6 +1,6 @@
 'use client'
 
-import React, { useState, useRef, Suspense } from 'react'
+import React, { useState, useRef } from 'react'
 import { Star, ArrowRight, Sparkles, Users, Trophy, ChevronDown, Trees } from 'lucide-react'
 import { Header } from '@/components/layout/Header'
 import { Footer } from '@/components/layout/Footer'
@@ -21,8 +21,12 @@ import { ParallaxSection } from '@/components/motion/parallax-section'
 import { ScrollReveal } from '@/components/motion/scroll-reveal'
 import { ScrollControlled3D } from '@/components/3d/scroll-controlled-3d'
 import { CanvasWrapper } from '@/components/3d/canvas-wrapper'
+import { HeroSection } from '@/components/sections/hero-section'
+import { HorsePortfolio } from '@/components/sections/horse-portfolio'
+import { EditorialSection, NewsletterSignup } from '@/components/sections/editorial-layouts'
 import { useMotion } from '@/components/providers/MotionProvider'
 import { useLenisScroll } from '@/hooks/use-lenis'
+import { getMockHorses, getMockArticles } from '@/lib/data/mock-data'
 
 export default function HomePage() {
   const { shouldReduceMotion, toggleMotion } = useMotion()
@@ -39,88 +43,52 @@ export default function HomePage() {
     scrollTo(window.innerHeight)
   }
 
+  // Get mock data
+  const horses = getMockHorses()
+  const articles = getMockArticles()
+  const breeds = Array.from(new Set(horses.map(h => h.breed)))
+  const disciplines = Array.from(new Set(horses.flatMap(h => h.discipline)))
+
   return (
     <>
       <Header />
 
-      {/* Hero Section with Parallax Background */}
-      <section className="relative min-h-screen flex items-center justify-center px-6 py-32 overflow-hidden">
-        {/* Parallax Background Elements */}
-        <ParallaxSection speed={-0.3} className="absolute inset-0">
-          <div className="absolute inset-0 bg-gradient-to-br from-midnight via-hunter to-midnight opacity-50" />
-          <div className="absolute top-20 right-20 h-96 w-96 rounded-full bg-gold/5 blur-3xl" />
-          <div className="absolute bottom-20 left-20 h-64 w-64 rounded-full bg-gold/3 blur-3xl" />
-        </ParallaxSection>
+      {/* Hero Section with Video Background */}
+      <HeroSection
+        headline="Luxury Equestrian Excellence"
+        subheadline="Welcome to MAM Center"
+        description="Experience the pinnacle of equestrian luxury with our world-class facilities, premium services, and exclusive experiences."
+        imageSrc="https://images.unsplash.com/photo-1553284965-83fd3e82fa5a?w=1600"
+        ctaText="Explore Our Services"
+        onCtaClick={scrollToIntro}
+      />
 
-        <ParallaxSection speed={-0.5} className="absolute inset-0">
-          <div className="absolute top-1/4 left-1/4 h-2 w-2 rounded-full bg-gold/20 blur-xl" />
-          <div className="absolute top-3/4 right-1/4 h-2 w-2 rounded-full bg-gold/10 blur-xl" />
-        </ParallaxSection>
-
-        <div className="relative z-10 mx-auto max-w-5xl text-center">
-          <StaggerContainer animation="fade-in" staggerDelay={150}>
-            <MotionWrapper animation="slide-down">
-              <p className="text-gold font-medium tracking-wide uppercase text-sm mb-4">
-                Welcome to MAM Center
-              </p>
-            </MotionWrapper>
-
-            <MotionWrapper animation="slide-up" delay={100}>
-              <Display size="3xl" gradient="gold" className="mb-6">
-                Luxury Equestrian Excellence
-              </Display>
-            </MotionWrapper>
-
-            <MotionWrapper animation="fade-in" delay={200}>
-              <Paragraph size="lg" maxWidth="prose" className="mb-8">
-                Experience the pinnacle of equestrian luxury with our world-class
-                facilities, premium services, and exclusive experiences.
-              </Paragraph>
-            </MotionWrapper>
-
-            <MotionWrapper animation="slide-up" delay={300}>
-              <GlassButtonGroup>
-                <GlassButton variant="primary" size="large" rightIcon={<ArrowRight className="h-4 w-4" />}>
-                  Explore Our Services
-                </GlassButton>
-                <GlassButton variant="secondary" size="large">
-                  Learn More
-                </GlassButton>
-              </GlassButtonGroup>
-            </MotionWrapper>
-          </StaggerContainer>
-        </div>
-
-        {/* Scroll Indicator */}
-        <MotionWrapper animation="fade-in" delay={500}>
-          <button
-            onClick={scrollToIntro}
-            className="absolute bottom-12 left-1/2 -translate-x-1/2 flex flex-col items-center gap-2 text-gold/60 hover:text-gold transition-colors"
-            aria-label="Scroll to explore more"
-          >
-            <Caption>Scroll to explore</Caption>
-            <ChevronDown className="h-6 w-6 animate-bounce" />
-          </button>
-        </MotionWrapper>
-      </section>
-
-      {/* Smooth Scroll Indicator Section */}
+      {/* Introduction */}
       <section className="relative px-6 py-24 bg-midnight">
         <div className="mx-auto max-w-4xl text-center">
           <ViewportAnimator animation="fade-in">
             <Display size="2xl" className="mb-6">
-              Experience Smooth Scrolling
+              Discover Excellence
             </Display>
-            <Paragraph size="lg" maxWidth="prose" className="mb-8">
-              Scroll down to see our luxury smooth scroll experience powered by Lenis.
+            <Paragraph size="lg" maxWidth="prose">
+              Scroll down to explore our collection of championship horses and world-class facilities.
             </Paragraph>
           </ViewportAnimator>
         </div>
       </section>
 
-      {/* Parallax Showcase Section */}
+      {/* Featured Horses Portfolio */}
+      <HorsePortfolio
+        horses={horses}
+        breeds={breeds}
+        disciplines={disciplines}
+        ageRange={[4, 12]}
+        priceRange={[50000, 150000]}
+        onHorseClick={(horse) => console.log('Clicked horse:', horse.id)}
+      />
+
+      {/* Services Overview with Parallax */}
       <section className="relative min-h-screen flex items-center justify-center overflow-hidden">
-        {/* Background with parallax layers */}
         <div className="absolute inset-0 bg-gradient-to-b from-midnight to-hunter" />
 
         <ParallaxSection speed={0.3} className="absolute top-20 left-10">
@@ -150,81 +118,54 @@ export default function HomePage() {
         <div className="relative z-10 text-center px-6">
           <ViewportAnimator animation="slide-up">
             <Display size="2xl" gradient="gold" className="mb-4">
-              Parallax Effects
+              Premium Services
             </Display>
             <Paragraph size="lg" maxWidth="prose">
-              Elements move at different speeds as you scroll, creating depth and immersion.
+              From training to breeding, we offer comprehensive equestrian services
             </Paragraph>
           </ViewportAnimator>
         </div>
       </section>
 
-      {/* Scroll Reveal Showcase */}
-      <section className="relative px-6 py-32 bg-midnight">
-        <div className="mx-auto max-w-6xl">
-          <ViewportAnimator animation="fade-in">
+      {/* Features Section */}
+      <section className="relative px-6 py-24 md:px-12 lg:px-24 bg-gradient-to-b from-midnight to-hunter">
+        <div className="mx-auto max-w-7xl">
+          <ViewportAnimator animation="slide-up">
             <div className="text-center mb-16">
-              <Display size="2xl" className="mb-4">Scroll Reveal</Display>
+              <Heading level={2} className="mb-4">Why Choose MAM Center</Heading>
               <Paragraph maxWidth="prose">
-                Elements gracefully appear as they enter your viewport.
+                Our commitment to excellence in every aspect of equestrian care
               </Paragraph>
             </div>
           </ViewportAnimator>
 
-          <ScrollReveal stagger={100} threshold={0.15}>
-            <div className="grid md:grid-cols-3 gap-6">
-              <GlassCard
-                icon={<Star className="h-6 w-6" />}
-                title="Premium Quality"
-                description="World-class facilities and services"
-                noise
-              />
-              <GlassCard
-                icon={<Sparkles className="h-6 w-6" />}
-                title="Luxury Experience"
-                description="Exclusive amenities for clients"
-                variant="elevated"
-                noise
-              />
-              <GlassCard
-                icon={<Trophy className="h-6 w-6" />}
-                title="Award Winning"
-                description="Excellence in equestrian care"
-                variant="bordered"
-                noise
-              />
-            </div>
-          </ScrollReveal>
-
-          <ScrollReveal stagger={100} threshold={0.15} delay={300}>
-            <div className="grid md:grid-cols-3 gap-6 mt-8">
-              <GlassCard
-                icon={<Users className="h-6 w-6" />}
-                title="Expert Team"
-                description="Dedicated professionals"
-                noise
-              />
-              <GlassCard
-                icon={<Trees className="h-6 w-6" />}
-                title="Horse Training"
-                description="Custom programs for all levels"
-                variant="elevated"
-                noise
-              />
-              <GlassCard
-                icon={<Trees className="h-6 w-6" />}
-                title="Scenic Trails"
-                description="60 acres of exploration"
-                variant="bordered"
-                noise
-              />
-            </div>
-          </ScrollReveal>
+          <GlassCardGrid cols={3} gap="lg">
+            <GlassCard
+              icon={<Trophy className="h-6 w-6" />}
+              title="Champion Bloodlines"
+              description="Our horses come from the finest pedigrees, selected for their exceptional qualities and proven performance."
+              noise
+            />
+            <GlassCard
+              icon={<Sparkles className="h-6 w-6" />}
+              title="Expert Training"
+              description="Customized training programs designed to bring out the best in each horse and rider combination."
+              variant="elevated"
+              noise
+            />
+            <GlassCard
+              icon={<Users className="h-6 w-6" />}
+              title="Dedicated Team"
+              description="Our experienced professionals provide unparalleled care and attention to every detail."
+              variant="bordered"
+              noise
+            />
+          </GlassCardGrid>
         </div>
       </section>
 
       {/* 3D Scroll-Controlled Animation Demo */}
-      <section className="relative py-32 overflow-hidden">
+      <section className="relative py-32 overflow-hidden bg-midnight">
         <ScrollControlled3D
           scrollRange={2000}
           pin
@@ -260,98 +201,35 @@ export default function HomePage() {
           </mesh>
         </ScrollControlled3D>
 
-        {/* Overlay text */}
         <div className="absolute inset-0 flex items-center justify-center pointer-events-none">
           <div className="text-center">
             <ViewportAnimator animation="fade-in">
               <Display size="3xl" className="mb-4">
-                Scroll to Rotate
+                Interactive Experience
               </Display>
               <Paragraph size="lg">
-                The cube rotates based on your scroll position
+                Scroll to see our 3D capabilities
               </Paragraph>
             </ViewportAnimator>
           </div>
         </div>
       </section>
 
-      {/* 3D Canvas Demo Section */}
-      <section className="relative px-6 py-24 bg-midnight">
-        <div className="mx-auto max-w-4xl">
-          <ViewportAnimator animation="fade-in">
-            <div className="text-center mb-12">
-              <Display size="2xl" className="mb-4">
-                Interactive 3D Experience
-              </Display>
-              <Paragraph size="lg" maxWidth="prose">
-                Move your cursor over the canvas to see interactive lighting.
-              </Paragraph>
-            </div>
-          </ViewportAnimator>
+      {/* Editorial / Journal Section */}
+      <EditorialSection
+        articles={articles}
+        variant="magazine"
+        showFeatured
+        onArticleClick={(article) => console.log('Clicked article:', article.id)}
+      />
 
-          <ViewportAnimator animation="slide-up" delay={200}>
-            <div className="h-[500px] rounded-xl overflow-hidden border border-gold/20">
-              <CanvasWrapper
-                cameraPosition={[3, 2, 5]}
-                ariaLabel="Interactive 3D cube with lighting"
-                shadows
-              >
-                <ambientLight intensity={0.4} />
-                <directionalLight position={[5, 5, 5]} intensity={0.8} castShadow />
-                <pointLight position={[-5, 3, -5]} intensity={0.5} color="#d4af37" />
-
-                <mesh castShadow>
-                  <torusKnotGeometry args={[1, 0.3, 128, 32]} />
-                  <meshStandardMaterial color="#1a3a2e" metalness={0.8} roughness={0.2} />
-                </mesh>
-
-                <mesh rotation={[-Math.PI / 2, 0, 0]} position={[0, -1.5, 0]} receiveShadow>
-                  <planeGeometry args={[10, 10]} />
-                  <meshStandardMaterial color="#0a0e27" roughness={1} />
-                </mesh>
-              </CanvasWrapper>
-            </div>
-          </ViewportAnimator>
-        </div>
-      </section>
-
-      {/* Features Section with Glass Components */}
-      <section className="relative px-6 py-24 md:px-12 lg:px-24 bg-gradient-to-b from-midnight to-hunter">
+      {/* Newsletter Signup */}
+      <section className="relative px-6 py-16 bg-hunter">
         <div className="mx-auto max-w-7xl">
-          <ViewportAnimator animation="slide-up">
-            <div className="text-center mb-16">
-              <Heading level={2} className="mb-4">Premium Features</Heading>
-              <Paragraph maxWidth="prose">
-                Our luxury components with glassmorphism design and adaptive motion.
-              </Paragraph>
-            </div>
-          </ViewportAnimator>
-
-          <GlassCardGrid cols={3} gap="lg">
-            <GlassCard
-              icon={<Star className="h-6 w-6" />}
-              title="Premium Quality"
-              description="World-class facilities and services"
-              noise
-              action={<GlassButton variant="ghost" size="small">Learn More</GlassButton>}
-            />
-            <GlassCard
-              icon={<Sparkles className="h-6 w-6" />}
-              title="Luxury Experience"
-              description="Exclusive amenities for clients"
-              variant="elevated"
-              noise
-              action={<GlassButton variant="ghost" size="small">Learn More</GlassButton>}
-            />
-            <GlassCard
-              icon={<Trophy className="h-6 w-6" />}
-              title="Award Winning"
-              description="Excellence in equestrian care"
-              variant="bordered"
-              noise
-              action={<GlassButton variant="ghost" size="small">Learn More</GlassButton>}
-            />
-          </GlassCardGrid>
+          <NewsletterSignup
+            title="Stay Informed"
+            description="Subscribe to our newsletter for the latest news, insights, and exclusive offers from MAM Center."
+          />
         </div>
       </section>
 
