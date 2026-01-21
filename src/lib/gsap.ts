@@ -1,4 +1,5 @@
 import { gsap } from 'gsap'
+import { ScrollTrigger } from 'gsap/ScrollTrigger'
 import { prefersReducedMotion } from './utils'
 import { ANIMATION } from './constants'
 
@@ -99,6 +100,59 @@ export function staggerTween(
  */
 export function registerGsapPlugins(...plugins: gsap.Plugin[]): void {
   gsap.registerPlugin(...plugins)
+}
+
+/**
+ * Initialize GSAP with ScrollTrigger and Lenis integration
+ * Call this in a useEffect hook on component mount
+ * @param lenis - Optional Lenis instance for scroll synchronization
+ * @returns Cleanup function that kills all ScrollTriggers
+ */
+export function initGsapWithScrollTrigger(lenis?: { scroll: number; onScroll: (callback: () => void) => void }): () => void {
+  if (typeof window === 'undefined') return () => {}
+
+  // Register ScrollTrigger plugin
+  gsap.registerPlugin(ScrollTrigger)
+
+  // Set default GSAP animation properties
+  gsap.defaults({
+    ease: 'power2.out',
+    duration: 1,
+  })
+
+  // Configure ScrollTrigger to ignore mobile resize events
+  ScrollTrigger.config({
+    ignoreMobileResize: true,
+  })
+
+  // Synchronize ScrollTrigger with Lenis if provided
+  if (lenis) {
+    ScrollTrigger.scrollerProxy(window, {
+      scrollTop(value: number) {
+        if (arguments.length) {
+          lenis.scroll = value
+        }
+        return lenis.scroll
+      },
+      getBoundingClientRect() {
+        return {
+          top: 0,
+          left: 0,
+          width: window.innerWidth,
+          height: window.innerHeight,
+        } as DOMRect
+      },
+      pinType: document.body.style.transform ? 'fixed' : 'fixed',
+    })
+
+    // Update ScrollTrigger on Lenis scroll
+    lenis.onScroll(ScrollTrigger.update)
+  }
+
+  // Return cleanup function
+  return () => {
+    ScrollTrigger.getAll().forEach((trigger) => trigger.kill())
+  }
 }
 
 /**

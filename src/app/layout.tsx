@@ -2,6 +2,7 @@ import type { Metadata, Viewport } from 'next'
 import { Inter } from 'next/font/google'
 import './globals.css'
 import { MotionProvider } from '@/components/providers/MotionProvider'
+import { LenisProvider } from '@/components/providers/lenis-provider'
 
 // Import font configurations
 const inter = Inter({
@@ -112,7 +113,9 @@ export default function RootLayout({
     <html lang="en" className={inter.variable}>
       <body className={inter.variable}>
         <MotionProvider>
-          {children}
+          <LenisProvider>
+            {children}
+          </LenisProvider>
         </MotionProvider>
       </body>
     </html>
