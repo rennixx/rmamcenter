@@ -360,15 +360,15 @@ export function ViewportAnimator({
   }, [threshold, rootMargin, once, hasAnimated, shouldReduceMotion])
 
   return (
-    <MotionWrapper
-      ref={ref}
-      animation={isInView ? animation : 'none'}
-      delay={isInView ? delay : 0}
-      duration={duration}
-      className={className}
-      {...props}
-    >
-      {children}
-    </MotionWrapper>
+    <div ref={ref} className={className}>
+      <MotionWrapper
+        animation={isInView ? animation : 'none'}
+        delay={isInView ? delay : 0}
+        duration={duration}
+        {...props}
+      >
+        {children}
+      </MotionWrapper>
+    </div>
   )
 }

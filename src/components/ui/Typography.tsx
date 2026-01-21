@@ -94,10 +94,18 @@ export function Heading({
   children,
   ...props
 }: HeadingProps) {
-  const Tag = `h${level}` as keyof JSX.IntrinsicElements
+  // Use a type assertion that works with both React 18 and 19
+  const tagMap = {
+    1: 'h1',
+    2: 'h2',
+    3: 'h3',
+    4: 'h4',
+    5: 'h5',
+    6: 'h6',
+  } as const
+  const Tag = tagMap[level] as 'h1' | 'h2' | 'h3' | 'h4' | 'h5' | 'h6'
 
   return (
-    // @ts-expect-error - Tag is dynamically assigned but is valid
     <Tag className={cn(headingVariants({ level, weight }), className)} {...props}>
       {children}
     </Tag>
