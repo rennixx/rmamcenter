@@ -105,13 +105,14 @@ export function ScrollReveal({
 
     // Cleanup function - kill ScrollTriggers on unmount
     return () => {
-      if (typeof window !== 'undefined') {
+      // Dynamic import cleanup
+      import('gsap/ScrollTrigger').then(({ ScrollTrigger }) => {
         ScrollTrigger.getAll().forEach((trigger) => {
           if (trigger.trigger === containerRef.current) {
             trigger.kill()
           }
         })
-      }
+      })
     }
   }, [delay, stagger, threshold, shouldReduceMotion])
 

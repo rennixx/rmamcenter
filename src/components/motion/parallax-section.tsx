@@ -1,6 +1,6 @@
 'use client'
 
-import React, { useRef, useEffect } from 'react'
+import React, { useRef, useEffect, useState } from 'react'
 import { useMotion } from '@/components/providers/MotionProvider'
 import { cn } from '@/lib/utils'
 
@@ -20,17 +20,12 @@ export interface ParallaxSectionProps extends React.HTMLAttributes<HTMLDivElemen
  * Parallax Section Component
  *
  * Creates a parallax effect where elements move at different speeds during scroll.
- * Negative speed values move the element up as user scrolls down (slower than scroll).
- * Positive speed values move the element down as user scrolls down (faster than scroll).
+ * Uses transform for smooth 60fps performance without GSAP dependency.
  *
  * @example
  * ```tsx
  * <ParallaxSection speed={-0.5}>
  *   <img src="/background.jpg" alt="" />
- * </ParallaxSection>
- *
- * <ParallaxSection speed={0.3}>
- *   <h2>This text moves faster than scroll</h2>
  * </ParallaxSection>
  * ```
  */
@@ -42,6 +37,7 @@ export function ParallaxSection({
 }: ParallaxSectionProps) {
   const { shouldReduceMotion } = useMotion()
   const elementRef = useRef<HTMLDivElement>(null)
+  const [offset, setOffset] = useState(0)
 
   useEffect(() => {
     // Render static element if motion is reduced
@@ -53,50 +49,53 @@ export function ParallaxSection({
       return
     }
 
-    const setupParallax = async () => {
-      // Dynamic import to avoid SSR issues
-      const { gsap } = await import('gsap')
-      const { ScrollTrigger } = await import('gsap/ScrollTrigger')
+    let animationFrameId: number
+    let currentScroll = 0
+    let targetScroll = 0
 
-      gsap.registerPlugin(ScrollTrigger)
+    // Smooth update loop for buttery smooth parallax
+    const updateParallax = () => {
+      // Lerp towards target scroll position for smoothness
+      const diff = targetScroll - currentScroll
+      currentScroll += diff * 0.1 // Smooth easing factor
 
-      const element = elementRef.current
-      if (!element) return
+      // Calculate Y position based on scroll and speed
+      const yPosition = currentScroll * speed
+      elementRef.current!.style.transform = `translate3d(0, ${yPosition}px, 0)`
 
-      // Calculate y-position based on scroll
-      // Speed -1: moves up (opposite to scroll direction)
-      // Speed 0: no movement
-      // Speed 1: moves down (same as scroll direction)
-      const yMovement = speed * 100 // Percentage of viewport height
-
-      // Create the parallax animation
-      gsap.to(element, {
-        yPercent: yMovement,
-        ease: 'none',
-        scrollTrigger: {
-          trigger: element,
-          start: 'top bottom', // When element's top hits viewport bottom
-          end: 'bottom top', // When element's bottom hits viewport top
-          scrub: true, // Smooth scroll-linked animation
-        },
-      })
+      // Continue animation loop
+      animationFrameId = requestAnimationFrame(updateParallax)
     }
 
-    setupParallax()
+    // Handle scroll events
+    const handleScroll = () => {
+      targetScroll = window.scrollY
+    }
+
+    // Initial scroll position
+    targetScroll = window.scrollY
+    currentScroll = window.scrollY
+
+    // Start animation loop
+    animationFrameId = requestAnimationFrame(updateParallax)
+
+    // Add scroll listener
+    window.addEventListener('scroll', handleScroll, { passive: true })
 
     // Cleanup function
     return () => {
-      // Kill ScrollTrigger on unmount
-      ScrollTrigger.getAll().forEach((trigger) => {
-        if (trigger.trigger === elementRef.current) {
-          trigger.kill()
-        }
-      })
+      window.removeEventListener('scroll', handleScroll)
+      cancelAnimationFrame(animationFrameId)
     }
   }, [speed, shouldReduceMotion])
 
   return (
-    <div ref={elementRef} className={cn('parallax-section', className)} {...props}>
+    <div
+      ref={elementRef}
+      className={cn('parallax-section', className)}
+      style={{ willChange: shouldReduceMotion ? 'auto' : 'transform' }}
+      {...props}
+    >
       {children}
     </div>
   )
