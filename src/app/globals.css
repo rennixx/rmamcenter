@@ -247,4 +247,108 @@
   .animate-shine {
     animation: shine 1.5s ease-in-out;
   }
+
+  /* Ripple expansion animation */
+  @keyframes ripple-expand {
+    0% {
+      width: 0;
+      height: 0;
+      opacity: 0.5;
+    }
+    100% {
+      width: var(--ripple-size);
+      height: var(--ripple-size);
+      opacity: 0;
+    }
+  }
+
+  .animate-ripple-expand {
+    animation: ripple-expand var(--ripple-duration) ease-out forwards;
+  }
+
+  /* Shimmer animation for skeleton loaders */
+  @keyframes shimmer {
+    0% {
+      background-position: -1000px 0;
+    }
+    100% {
+      background-position: 1000px 0;
+    }
+  }
+
+  .animate-shimmer {
+    animation: shimmer 2s infinite;
+    background: linear-gradient(
+      90deg,
+      transparent,
+      rgba(212, 175, 55, 0.1),
+      transparent
+    );
+    background-size: 1000px 100%;
+  }
+
+  /* Slow spin for reduced motion */
+  .animate-spin-slow {
+    animation: spin 3s linear infinite;
+  }
+
+  @keyframes spin {
+    from {
+      transform: rotate(0deg);
+    }
+    to {
+      transform: rotate(360deg);
+    }
+  }
+
+  /* Progress bar fill animation */
+  @keyframes progress-fill {
+    from {
+      transform: scaleX(0);
+    }
+    to {
+      transform: scaleX(1);
+    }
+  }
+
+  .animate-progress-fill {
+    animation: progress-fill 0.3s ease-out forwards;
+    transform-origin: left;
+  }
+
+  /* Count up number animation */
+  @keyframes count-up {
+    0% {
+      opacity: 0;
+      transform: translateY(10px);
+    }
+    100% {
+      opacity: 1;
+      transform: translateY(0);
+    }
+  }
+
+  .animate-count-up {
+    animation: count-up 0.3s ease-out;
+  }
+
+  /* Particle float animation */
+  @keyframes particle-float {
+    0%, 100% {
+      transform: translateY(0) translateX(0);
+    }
+    25% {
+      transform: translateY(-10px) translateX(5px);
+    }
+    50% {
+      transform: translateY(-5px) translateX(-5px);
+    }
+    75% {
+      transform: translateY(-15px) translateX(-3px);
+    }
+  }
+
+  .animate-particle-float {
+    animation: particle-float var(--float-duration, 10s) ease-in-out infinite;
+  }
 }
