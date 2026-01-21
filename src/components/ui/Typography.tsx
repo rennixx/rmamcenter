@@ -461,14 +461,10 @@ export function List({
   children,
   ...props
 }: ListProps) {
-  const Tag = variant === 'ordered' ? 'ol' : 'ul'
-
-  return (
-    // @ts-expect-error - Tag is dynamically assigned
-    <Tag className={cn(listVariants({ variant, size }), className)} {...props}>
-      {children}
-    </Tag>
-  )
+  if (variant === 'ordered') {
+    return <ol className={cn(listVariants({ variant, size }), className)} {...props}>{children}</ol>
+  }
+  return <ul className={cn(listVariants({ variant, size }), className)} {...props}>{children}</ul>
 }
 
 export interface ListItemProps extends React.HTMLAttributes<HTMLLIElement> {}
