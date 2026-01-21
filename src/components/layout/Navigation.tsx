@@ -465,9 +465,11 @@ export function Navigation({
 
           {/* Desktop CTA */}
           <div className="hidden lg:block">
-            <GlassButton variant="primary" size="small" asChild>
-              <Link href={ctaHref}>{ctaText}</Link>
-            </GlassButton>
+            <Link href={ctaHref}>
+              <GlassButton variant="primary" size="small">
+                {ctaText}
+              </GlassButton>
+            </Link>
           </div>
 
           {/* Mobile Menu Button */}
