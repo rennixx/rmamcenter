@@ -421,14 +421,10 @@ export function Code({
   children,
   ...props
 }: CodeProps) {
-  const Tag = variant === 'block' ? 'pre' : 'code'
-
-  return (
-    // @ts-expect-error - Tag is dynamically assigned
-    <Tag className={cn(codeVariants({ variant }), className)} {...props}>
-      {children}
-    </Tag>
-  )
+  if (variant === 'block') {
+    return <pre className={cn(codeVariants({ variant }), className)} {...props}>{children}</pre>
+  }
+  return <code className={cn(codeVariants({ variant }), className)} {...props}>{children}</code>
 }
 
 // ============================================================================
