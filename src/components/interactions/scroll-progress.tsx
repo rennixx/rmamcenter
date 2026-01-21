@@ -56,7 +56,7 @@ export function ScrollProgress({
   const [progress, setProgress] = useState(0)
   const [isVisible, setIsVisible] = useState(!hideAtTop)
   const { shouldReduceMotion } = useMotion()
-  const rafRef = useRef<number>()
+  const rafRef = useRef<number | undefined>(undefined)
   const lastScrollY = useRef(0)
 
   useEffect(() => {
@@ -233,7 +233,7 @@ export function CircularScrollProgress({
   const [progress, setProgress] = useState(0)
   const [isVisible, setIsVisible] = useState(false)
   const { shouldReduceMotion } = useMotion()
-  const rafRef = useRef<number>()
+  const rafRef = useRef<number | undefined>(undefined)
 
   useEffect(() => {
     if (shouldReduceMotion) return
@@ -375,7 +375,7 @@ export function ReadingProgress({
 }: ReadingProgressProps) {
   const [progress, setProgress] = useState(0)
   const { shouldReduceMotion } = useMotion()
-  const rafRef = useRef<number>()
+  const rafRef = useRef<number | undefined>(undefined)
 
   useEffect(() => {
     if (shouldReduceMotion) return
@@ -460,8 +460,8 @@ export function useScrollProgress() {
   const [progress, setProgress] = useState(0)
   const [isScrolling, setIsScrolling] = useState(false)
   const { shouldReduceMotion } = useMotion()
-  const rafRef = useRef<number>()
-  const scrollTimeoutRef = useRef<number>()
+  const rafRef = useRef<number | undefined>(undefined)
+  const scrollTimeoutRef = useRef<number | undefined>(undefined)
 
   useEffect(() => {
     if (shouldReduceMotion) return

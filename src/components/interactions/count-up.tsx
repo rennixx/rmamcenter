@@ -2,7 +2,6 @@
 
 import React, { useState, useEffect, useRef, useCallback } from 'react'
 import { useMotion } from '@/components/providers/MotionProvider'
-import { ViewportAnimator } from '@/components/motion/MotionWrapper'
 import { cn } from '@/lib/utils'
 
 /**
@@ -98,8 +97,8 @@ export function CountUp({
   const [count, setCount] = useState(start)
   const [hasAnimated, setHasAnimated] = useState(false)
   const { shouldReduceMotion } = useMotion()
-  const rafRef = useRef<number>()
-  const startTimeRef = useRef<number>()
+  const rafRef = useRef<number | undefined>(undefined)
+  const startTimeRef = useRef<number | undefined>(undefined)
 
   // Format number with commas and decimals
   const formatNumber = useCallback(
@@ -181,19 +180,52 @@ export function CountUp({
     }
   }, [])
 
+  // Intersection Observer ref for scroll-triggered animation
+  const observerRef = useRef<HTMLSpanElement>(null)
+
+  useEffect(() => {
+    if (!animateOnView || shouldReduceMotion) return
+
+    const observer = new IntersectionObserver(
+      (entries) => {
+        entries.forEach((entry) => {
+          if (entry.isIntersecting && !hasAnimated) {
+            startAnimation()
+          }
+        })
+      },
+      { threshold: 0.1 }
+    )
+
+    const currentRef = observerRef.current
+    if (currentRef) {
+      observer.observe(currentRef)
+    }
+
+    return () => {
+      if (currentRef) {
+        observer.unobserve(currentRef)
+      }
+    }
+  }, [animateOnView, hasAnimated, shouldReduceMotion, startAnimation])
+
   // Content
   const content = (
-    <span className={cn('font-mono', className)}>
+    <span
+      ref={observerRef}
+      className={cn(
+        'font-mono',
+        animateOnView && !shouldReduceMotion && 'opacity-0',
+        (hasAnimated || !animateOnView || shouldReduceMotion) && 'opacity-100',
+        'transition-opacity duration-300',
+        className
+      )}
+    >
       {prefix}
       {formatNumber(count)}
       {suffix}
     </span>
   )
-
-  // Wrap in ViewportAnimator if scroll-triggered
-  if (animateOnView) {
-    return <ViewportAnimator animation="fade-in" onInView={startAnimation}>{content}</ViewportAnimator>
-  }
 
   return content
 }
@@ -377,17 +409,22 @@ export function StatsGrid({
   return (
     <div className={cn('grid gap-6', gridCols[columns], className)}>
       {stats.map((stat, index) => (
-        <ViewportAnimator
+        <div
           key={index}
-          animation="fade-in"
-          delay={index * 100}
+          className="opacity-0 animate-fade-in"
+          style={
+            {
+              animationDelay: `${index * 100}ms`,
+              animationFillMode: 'forwards'
+            } as React.CSSProperties
+          }
         >
           <AnimatedStat
             {...stat}
             size={size}
             variant={variant}
           />
-        </ViewportAnimator>
+        </div>
       ))}
     </div>
   )
@@ -417,8 +454,8 @@ export function useCountUp(
   const [count, setCount] = useState(start)
   const [isAnimating, setIsAnimating] = useState(false)
   const { shouldReduceMotion } = useMotion()
-  const rafRef = useRef<number>()
-  const startTimeRef = useRef<number>()
+  const rafRef = useRef<number | undefined>(undefined)
+  const startTimeRef = useRef<number | undefined>(undefined)
 
   const animate = useCallback(
     (timestamp: number) => {

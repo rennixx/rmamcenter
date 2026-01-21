@@ -82,7 +82,7 @@ export function ParticleBackground({
 }: ParticleBackgroundProps) {
   const canvasRef = useRef<HTMLCanvasElement>(null)
   const particlesRef = useRef<Particle[]>([])
-  const rafRef = useRef<number>()
+  const rafRef = useRef<number | undefined>(undefined)
   const { shouldReduceMotion } = useMotion()
   const { x: cursorX, y: cursorY, isTouch } = useCursorPosition()
 

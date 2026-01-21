@@ -15,11 +15,11 @@ export type { CursorSpotlightProps, ConfigurableSpotlightProps } from './cursor-
 
 // Magnetic Element
 export { MagneticElement, MagneticButton } from './magnetic-element'
-export type { MagneticElementProps, MagneticButtonProps } from './magnetic-element'
+export type { MagneticElementProps } from './magnetic-element'
 
 // Texture Renderer
 export { TextureRenderer, TexturePanel } from './texture-renderer'
-export type { TextureRendererProps, SkeletonProps } from './texture-renderer'
+export type { TextureRendererProps } from './texture-renderer'
 
 // Loading Overlay
 export {
@@ -75,6 +75,5 @@ export type {
 
 // Hooks
 export { useCursorPosition } from '@/hooks/use-cursor-position'
-export type { CursorPositionReturn } from '@/hooks/use-cursor-position'
 
 export { useMagneticEffect, useHoverLight } from '@/hooks/use-magnetic-effect'

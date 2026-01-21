@@ -56,7 +56,7 @@ export function CursorSpotlight({
   const currentY = useRef(0)
   const targetX = useRef(0)
   const targetY = useRef(0)
-  const rafId = useRef<number>()
+  const rafId = useRef<number | undefined>(undefined)
 
   // Linear interpolation function
   const lerp = (start: number, end: number, factor: number) => {

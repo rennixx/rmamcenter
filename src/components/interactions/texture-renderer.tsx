@@ -71,14 +71,14 @@ export function TextureRenderer({
     if (shouldReduceMotion) return
 
     const canvas = canvasRef.current
-    const gl = canvas.getContext('webgl') || canvas.getContext('experimental-webgl')
+    const gl = canvas.getContext('webgl') || canvas.getContext('experimental-webgl') as WebGLRenderingContext | null
 
     if (!gl) {
       console.warn('WebGL not supported')
       return
     }
 
-    glRef.current = gl
+    glRef.current = gl as WebGLRenderingContext
 
     // Vertex shader - simple pass-through
     const vsSource = `
@@ -169,6 +169,7 @@ export function TextureRenderer({
 
     // Create shader program
     const vs = gl.createShader(gl.VERTEX_SHADER)
+    if (!vs) return
     gl.shaderSource(vs, vsSource)
     gl.compileShader(vs)
     if (!gl.getShaderParameter(vs, gl.COMPILE_STATUS)) {
@@ -176,6 +177,7 @@ export function TextureRenderer({
     }
 
     const fs = gl.createShader(gl.FRAGMENT_SHADER)
+    if (!fs) return
     gl.shaderSource(fs, fsSource)
     gl.compileShader(fs)
     if (!gl.getShaderParameter(fs, gl.COMPILE_STATUS)) {
@@ -183,6 +185,7 @@ export function TextureRenderer({
     }
 
     const program = gl.createProgram()
+    if (!program) return
     gl.attachShader(program, vs)
     gl.attachShader(program, fs)
     gl.linkProgram(program)
@@ -291,7 +294,7 @@ export function TextureRenderer({
       borderRadius: '8px',
     }
 
-    return <div ref={canvasRef} style={style} className={className} />
+    return <div style={style} className={className} />
   }
 
   return (

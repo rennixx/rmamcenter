@@ -143,14 +143,17 @@ export function LoadingOverlay({
     }
   }, [state])
 
-  if (state === 'idle') {
+  // Store state for use in JSX before early return
+  const currentState = state as LoadingState
+
+  if (currentState === 'idle') {
     return <>{children}</>
   }
 
   const content = (
     <div className="flex flex-col items-center justify-center gap-4">
       {/* Loading spinner */}
-      {(state === 'loading' || state === 'idle') && (
+      {currentState === 'loading' && (
         <ViewportAnimator animation="fade-in">
           <div className="relative">
             <Loader2
@@ -164,7 +167,7 @@ export function LoadingOverlay({
       )}
 
       {/* Success checkmark */}
-      {state === 'success' && (
+      {currentState === 'success' && (
         <ViewportAnimator animation="fade-in">
           <div className="w-12 h-12 rounded-full bg-green-500/20 flex items-center justify-center">
             <svg
@@ -185,7 +188,7 @@ export function LoadingOverlay({
       )}
 
       {/* Error icon */}
-      {state === 'error' && (
+      {currentState === 'error' && (
         <ViewportAnimator animation="fade-in">
           <div className="w-12 h-12 rounded-full bg-red-500/20 flex items-center justify-center">
             <svg
@@ -215,7 +218,7 @@ export function LoadingOverlay({
       )}
 
       {/* Progress bar */}
-      {state === 'loading' && (
+      {currentState === 'loading' && (
         <ViewportAnimator animation="fade-in" delay={200}>
           <div className="w-48">
             <div className="flex items-center justify-between text-xs text-gold/60 mb-2">
@@ -245,7 +248,7 @@ export function LoadingOverlay({
           className={cn(
             fullScreen ? 'fixed inset-0' : 'absolute inset-0',
             'transition-all duration-500',
-            state !== 'idle' && 'backdrop-blur-md bg-midnight/40'
+            'backdrop-blur-md bg-midnight/40'
           )}
         >
           {children}
@@ -359,7 +362,8 @@ export function BlurUpImage({
       alt={alt}
       className={cn(
         'transition-opacity duration-500',
-        !isLoaded && 'opacity-0'
+        !isLoaded && 'opacity-0',
+        className
       )}
       style={{
         filter: isLoaded ? 'none' : 'blur(20px)',
@@ -369,7 +373,6 @@ export function BlurUpImage({
       onError={() => {
         // Fallback or error handling
       }}
-      className={className}
     />
   )
 }
