@@ -174,12 +174,11 @@ export function MotionWrapper({
   // Animation config
   const anim = animations[animation]
 
-  // Build inline styles
-  const inlineStyle: React.CSSProperties = {
-    animation: !shouldReduceMotion && (isVisible || isHovered)
-      ? `${animation}-custom ${duration}ms ${easing} forwards`
-      : undefined,
-    animationDelay: !shouldReduceMotion && !isVisible && animateOnMount ? `${delay}ms` : undefined,
+  // Build inline styles - avoid mixing animation shorthand with animationDelay
+  const inlineStyle: React.CSSProperties = {}
+
+  if (!shouldReduceMotion && (isVisible || isHovered)) {
+    inlineStyle.animation = `${animation}-custom ${duration}ms ${easing} forwards`
   }
 
   return (
