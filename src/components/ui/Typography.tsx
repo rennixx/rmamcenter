@@ -257,6 +257,8 @@ export function Label({
 export interface CaptionProps extends React.HTMLAttributes<HTMLElement> {
   /** Semantic tag to use */
   as?: 'span' | 'figcaption' | 'caption'
+  /** Text alignment */
+  align?: 'left' | 'center' | 'right'
 }
 
 const captionVariants = cva(['text-xs text-gray-500'], {
